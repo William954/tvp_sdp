@@ -15,7 +15,7 @@ Agrega el módulo con formulario para solicitar pagos
 
     """,
     'website': 'tvp.mx',
-    'depends': ['base','contacts','project','account','account_accountant'],
+    'depends': ['base','contacts','project','account','account_accountant','hr'],
     'data': [
          'views/sdp_view.xml',
          'security/security.xml',

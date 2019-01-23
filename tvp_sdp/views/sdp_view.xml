@@ -26,63 +26,111 @@
             </field>
         </record>
 
+
         <record id="sdp_view_form" model="ir.ui.view">
             <field name="name">sdp.form</field>
             <field name="model">sdp</field>
             <field name="arch" type="xml">
                 <form string="Solicitudes Actuales">
                     <header>
-                        <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                        <button name="button_confirm" string="Confirmar Pago" 
+                        type="object" class="oe_highlight" states="draft" />
+
+                        <button name="button_director_approval" string="Aprobacion Jefe Directo" 
+                        type="object" class="oe_highlight" states="manager_ap" />
+
+                        <button name="button_finanzas_approval" string="Finanzas" 
+                        type="object" class="oe_highlight" states="finanzas_ap" /> 
+
+                        <button name="button_vp_approval" string="V.P." 
+                        type="object" class="oe_highlight" states="vp_ap" /> 
+
+                        <button name="button_tesoreria_approval" string="Tesoreria" 
+                        type="object" class="oe_highlight" states="tesoreria" /> 
+
+                        <button name="button_cancel" string="Rechazar" 
+                        type="object" class="oe_highlight" states="manager_ap,finanzas_ap,vp_ap,tesoreria" />  
+
+                        <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
-                    <div class="oe_button_box" name="button_box">
-                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
-                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
-                        </button>
-                    </div>
-                    <div class="oe_title" name="title">
-                        <label for="name" class="oe_edit_only"/>
-                        <h1>
-                            <field name="name" placeholder="Referencia de Solicitud"/>
-                        </h1>
-                    </div>
-                    <group>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <div class="oe_title" name="title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="Referencia de Solicitud"/>
+                            </h1>
+                        </div>
                         <group>
-                            <field name="employee_id"/>
-                            <field name="department_id"/>
-                            <field name="job_id"/>
-                            <field name="company_id"/>
-                            <field name="metodo"/>
-                        </group>
-                        <group>
-                            <field name="moneda"/>
-                            <field name="fecha_de_pago"/>
-                            <field name="referencia"/>
-                            <field name="concepto"/>
-                            <field name="check_ppto"/>
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Montos y Presupuestos" name="other">
                             <group>
-                                <group name="presupuesto_group" string="Datos de Proyecto o Presupuesto">
-                                    <field name="proyecto"/>
-                                    <field name="clave_pro"/>
-                                    <field name="rubro_cc"/>
-                                    
-                                </group>
-                                <group name="numeros_group" string="Datos del importe">
-                                    <field name="importe"/>
-                                    <field name="iva"/>
-                                    <field name="subtotal"/>
-                                    <field name="retisr"/>
-                                    <field name="retiva"/>
-                                    <field name="total"/>
-                                </group>
+                                <field name="employee_id"/>
+                                <field name="department_id"/>
+                                <field name="job_id"/>
+                                <field name="company_id"/>
+                                <field name="metodo"/>
                             </group>
-                        </page>
-  
-                    </notebook>
+                            <group>
+                                <field name="moneda"/>
+                                <field name="fecha_de_pago"/>
+                                <field name="referencia"/>
+                                <field name="concepto"/>
+                                <field name="check_ppto"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Montos y Presupuestos" name="other">
+                                <group>
+                                    <group name="presupuesto_group" string="Datos de Proyecto o Presupuesto">
+                                        <field name="proyecto"/>
+                                        <field name="clave_pro"/>
+                                        <field name="rubro_cc"/>
+                                        
+                                    </group>
+                                    <group name="numeros_group" string="Datos del importe">
+                                        <field name="importe"/>
+                                        <field name="iva"/>
+                                        <field name="subtotal"/>
+                                        <field name="retisr"/>
+                                        <field name="retiva"/>
+                                        <field name="total"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="approve" string="Detalles de Aprobacion">
+                                <group>
+                                    <group string="Detalles de Aprobacion">
+                                        <field name="approve_jefe_directo"/>
+                                        <field name="approve_finanzas"/>
+                                        <field name="approve_vp_ap"/>
+                                        <field name="approve_tesoreria"/>
+                                    </group>
+                                    <group>
+                                        <field name="jefe_directo_approve_date"/>
+                                        <field name="finanzas_approve_date"/>
+                                        <field name="vp_ap_approve_date"/>
+                                        <field name="tesoreria_approve_date"/>
+                                    </group>
+                                    <group>
+                                        <field name="jefe_directo"/>
+                                        <field name="finanzas"/>
+                                        <field name="vp_ap"/>
+                                        <field name="tesoreria"/>
+                                    </group>
+                                </group>
+                                <group name="refuse" string="Detalle de Rechazo">
+                                    <group>
+                                        <field name="refuse_user_id"/>
+                                    </group>
+                                    <group>
+                                        <field name="refuse_date"/>
+                                    </group>
+                                </group>
+                            </page>  
+                        </notebook>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>

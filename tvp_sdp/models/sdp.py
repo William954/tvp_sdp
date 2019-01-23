@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from datetime import date
+from datetime import date,time
 from dateutil.relativedelta import relativedelta
-
+from odoo.exceptions import UserError
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
@@ -37,10 +37,12 @@ class Sdp(models.Model):
         ('manager_ap', 'Vo. Bo. JD'),
         ('finanzas_ap', 'Vo. Bo. Finanzas'),
         ('vp_ap', 'Vo. Bo. VP'),
-        ('planificado', 'Pago Planificado'),
-        ('rechazado', 'Rechazado')
+        ('tesoreria', 'Tesoreria'),
+        ('rechazado', 'Rechazado'),
     ], string='Status',
        track_visibility='onchange', help='Estatus de la Solicitud', default='draft')
+
+
     check_ppto = fields.Selection([
         ('si_ppto', 'Presupuestado'),
         ('no_ppto', 'No Presupuestado'),
@@ -55,12 +57,29 @@ class Sdp(models.Model):
     retiva = fields.Float('Retención IVA') 
     total = fields.Float('Total', compute='_total') 
 
+
+    jefe_directo = fields.Many2one('res.users',string='Jefe Directo')
+    finanzas = fields.Many2one('res.users',string='Finanzas')
+    vp_ap = fields.Many2one('res.users',string='V.P.')
+    tesoreria = fields.Many2one('res.users',string='Tesoreria')
+
+
+    approve_jefe_directo = fields.Char(string='Aprobacion Jefe Directo',readonly=True)
+    approve_finanzas = fields.Char(string='Aprobacion Finanzas',readonly=True)
+    approve_vp_ap = fields.Char(string='Aprobacion V.P.',readonly=True)
+    approve_tesoreria = fields.Char(string='Aprobacion Tesoreria',readonly=True)
+    refuse_user_id = fields.Char(string="Rechazado por",readonly = True,)
+    refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True)
+    jefe_directo_approve_date = fields.Datetime(string='Fecha de aprobacion del Jefe Directo',readonly=True,)
+    finanzas_approve_date = fields.Datetime(string='Fecha de aprobacion de Finanzas',readonly=True,)
+    vp_ap_approve_date = fields.Datetime(string='Fecha de aprobacion de V.P.',readonly=True,)
+    tesoreria_approve_date = fields.Datetime(string='Fecha de aprobacion de Tesoreria',readonly=True,)
+
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
         if self.employee_id:
             self.job_id = self.employee_id.job_id
             self.department_id = self.employee_id.department_id
-# , group_expand='_expand_states' string='Clave')
 
     @api.onchange('proyecto')
     def _analitic_id(self):
@@ -73,3 +92,92 @@ class Sdp(models.Model):
         self.subtotal = self.iva + self.importe
         self.total = self.subtotal - (self.retisr - self.retiva)
 
+
+# Aprobacion
+
+
+    @api.multi
+    def button_confirm(self,vals):
+        for rec in self:    
+            if not rec.jefe_directo:
+                raise UserError(_('Porfavor selecciona un jefe directo'))
+            if not rec.finanzas:
+                raise UserError(_('Porfavor selecciona un encargado de finanzas'))
+            if not rec.vp_ap:
+                raise UserError(_('Porfavor selecciona un jefe V.P.'))
+            if not rec.tesoreria:
+                raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
+            else: 
+                self.state = 'manager_ap'
+
+ 
+    @api.multi
+    def button_director_approval(self,vals):
+        for rec in self:    
+            if not rec.jefe_directo:
+                raise UserError(_('Porfavor selecciona un jefe directo'))
+            if not rec.finanzas:
+                raise UserError(_('Porfavor selecciona un encargado de finanzas'))
+            if not rec.vp_ap:
+                raise UserError(_('Porfavor selecciona un jefe V.P.'))
+            if not rec.tesoreria:
+                raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
+            else: 
+                rec.state = 'finanzas_ap'
+                rec.approve_jefe_directo = self.env.user.name
+                rec.jefe_directo_approve_date = fields.Datetime.now()
+
+    @api.multi
+    def button_finanzas_approval(self,vals):
+        for rec in self:    
+            if not rec.jefe_directo:
+                raise UserError(_('Porfavor selecciona un jefe directo'))
+            if not rec.finanzas:
+                raise UserError(_('Porfavor selecciona un encargado de finanzas'))
+            if not rec.vp_ap:
+                raise UserError(_('Porfavor selecciona un jefe V.P.'))
+            if not rec.tesoreria:
+                raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
+            else: 
+                rec.state = 'vp_ap'
+                rec.approve_finanzas = self.env.user.name
+                rec.finanzas_approve_date = fields.Datetime.now()
+
+
+    @api.multi
+    def button_vp_approval(self,vals):
+        for rec in self:    
+            if not rec.jefe_directo:
+                raise UserError(_('Porfavor selecciona un jefe directo'))
+            if not rec.finanzas:
+                raise UserError(_('Porfavor selecciona un encargado de finanzas'))
+            if not rec.vp_ap:
+                raise UserError(_('Porfavor selecciona un jefe V.P.'))
+            if not rec.tesoreria:
+                raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
+            else: 
+                rec.state = 'tesoreria'
+                rec.approve_vp_ap = self.env.user.name
+                rec.vp_ap_approve_date = fields.Datetime.now()
+
+    @api.multi
+    def button_tesoreria_approval(self,vals):
+        for rec in self:    
+            if not rec.jefe_directo:
+                raise UserError(_('Porfavor selecciona un jefe directo'))
+            if not rec.finanzas:
+                raise UserError(_('Porfavor selecciona un encargado de finanzas'))
+            if not rec.vp_ap:
+                raise UserError(_('Porfavor selecciona un jefe V.P.'))
+            if not rec.tesoreria:
+                raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
+            else: 
+                rec.approve_tesoreria = self.env.user.name
+                rec.tesoreria_approve_date = fields.Datetime.now()
+
+
+    @api.multi
+    def button_cancel(self):
+        self.state = 'rechazado'  
+        self.refuse_user_id = self.env.user.name
+        self.refuse_date = fields.Datetime.now()
