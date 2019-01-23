@@ -14,8 +14,24 @@ class Sdp(models.Model):
     _description = 'Solicitud de Pago'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char('Referencia de la Solicitud', required=True)
-    employee_id = fields.Many2one('hr.employee', string='Solicitante',default=lambda self: self.env.user.id)
+
+    @api.model
+    def create(self, vals):
+        cr = self.env.cr
+        cr.execute('select coalesce(max(id), 0) from "sdp"')
+        id_returned = cr.fetchone()
+        if (max(id_returned)+1) < 10:
+            vals['name'] = "SDP00" + str(max(id_returned)+1)
+        if (max(id_returned)+1) >= 10 and (max(id_returned)+1) < 100:
+            vals['name'] = "SDP0" + str(max(id_returned)+1)
+        if (max(id_returned)+1) >= 100 :
+            vals['name'] = "SDP" + str(max(id_returned)+1)
+        result = super(Sdp, self).create(vals)
+        return result
+
+
+    name = fields.Char('Referencia de la Solicitud', required=True,default='New')
+    employee_id = fields.Many2one('res.partner', string='Solicitante',default=lambda self: self.env.user.id)
     department_id = fields.Many2one('hr.department', string="Departamento")
     job_id = fields.Many2one('hr.job', string='Puesto')
     active = fields.Boolean(default=True)
@@ -90,7 +106,7 @@ class Sdp(models.Model):
     @api.depends('subtotal','retisr','retiva','total','iva','importe')
     def _total(self):
         self.subtotal = self.iva + self.importe
-        self.total = self.subtotal - (self.retisr - self.retiva)
+        self.total = self.subtotal - (self.retisr + self.retiva)
 
 
 # Aprobacion
