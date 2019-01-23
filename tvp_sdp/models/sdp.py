@@ -31,7 +31,7 @@ class Sdp(models.Model):
 
 
     name = fields.Char('Referencia de la Solicitud', required=True,default='New')
-    employee_id = fields.Many2one('res.partner', string='Solicitante',default=lambda self: self.env.user.id)
+    employee_id = fields.Many2one('hr.employee', string='Solicitante',default=lambda self: self.env.user.create_uid)
     department_id = fields.Many2one('hr.department', string="Departamento")
     job_id = fields.Many2one('hr.job', string='Puesto')
     active = fields.Boolean(default=True)
@@ -54,6 +54,7 @@ class Sdp(models.Model):
         ('finanzas_ap', 'Vo. Bo. Finanzas'),
         ('vp_ap', 'Vo. Bo. VP'),
         ('tesoreria', 'Tesoreria'),
+        ('pagado', 'Pagado'),
         ('rechazado', 'Rechazado'),
     ], string='Status',
        track_visibility='onchange', help='Estatus de la Solicitud', default='draft')
@@ -90,6 +91,7 @@ class Sdp(models.Model):
     finanzas_approve_date = fields.Datetime(string='Fecha de aprobacion de Finanzas',readonly=True,)
     vp_ap_approve_date = fields.Datetime(string='Fecha de aprobacion de V.P.',readonly=True,)
     tesoreria_approve_date = fields.Datetime(string='Fecha de aprobacion de Tesoreria',readonly=True,)
+    refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True)
 
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
@@ -197,3 +199,7 @@ class Sdp(models.Model):
         self.state = 'rechazado'  
         self.refuse_user_id = self.env.user.name
         self.refuse_date = fields.Datetime.now()
+   
+    @api.multi
+    def button_pay(self):
+        self.state = 'pagado' 

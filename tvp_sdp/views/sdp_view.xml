@@ -51,6 +51,8 @@
                         <button name="button_cancel" string="Rechazar" 
                         type="object" class="oe_highlight" states="manager_ap,finanzas_ap,vp_ap,tesoreria" />  
 
+                        <button name="button_pay" string="Pagado" 
+                        type="object" class="oe_highlight" states="tesoreria" /> 
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
