@@ -30,24 +30,24 @@ class Sdp(models.Model):
         return result
 
 
-    name = fields.Char('Referencia de la Solicitud', required=True,default='New')
-    employee_id = fields.Many2one('hr.employee', string='Solicitante',default=lambda self: self.env.user.create_uid)
-    department_id = fields.Many2one('hr.department', string="Departamento")
-    job_id = fields.Many2one('hr.job', string='Puesto')
-    active = fields.Boolean(default=True)
-    company_id = fields.Many2one('res.company', string='Empresa')
+    name = fields.Char('Referencia de la Solicitud', required=True,default='New',track_visibility=True)
+    employee_id = fields.Many2one('hr.employee', string='Solicitante',default=lambda self: self.env.user.create_uid,track_visibility=True)
+    department_id = fields.Many2one('hr.department', string="Departamento",track_visibility=True)
+    job_id = fields.Many2one('hr.job', string='Puesto',track_visibility=True)
+    active = fields.Boolean(default=True,track_visibility=True)
+    company_id = fields.Many2one('res.company', string='Empresa',track_visibility=True)
     metodo = fields.Selection([
         ('transf', 'Transferencia'),
         ('cheque', 'Cheque'),
-    ], string='Metodo', help="Metodo de pago", default='transf')
+    ], string='Metodo', help="Metodo de pago", default='transf',track_visibility=True)
     moneda = fields.Selection([
         ('nacional', 'Nacional'),
         ('usd', 'USD'),
-    ], string='Moneda', help="Moneda para pago", default='nacional')
+    ], string='Moneda', help="Moneda para pago", default='nacional',track_visibility=True)
     fecha_de_pago = fields.Date('Fecha de Pago', default=fields.Date.today,
-        help="Fecha en la que se tiene que realizar el pago.")
-    referencia = fields.Char('Referencia', help="No de factura u orden de pago")
-    concepto = fields.Char('Concepto', help="Razon de ser del pago")
+        help="Fecha en la que se tiene que realizar el pago.",track_visibility=True)
+    referencia = fields.Char('Referencia', help="No de factura u orden de pago",track_visibility=True)
+    concepto = fields.Char('Concepto', help="Razon de ser del pago",track_visibility=True)
     state = fields.Selection([
         ('draft', 'New'),
         ('manager_ap', 'Vo. Bo. JD'),
@@ -57,42 +57,42 @@ class Sdp(models.Model):
         ('pagado', 'Pagado'),
         ('rechazado', 'Rechazado'),
     ], string='Status',
-       track_visibility='onchange', help='Estatus de la Solicitud', default='draft')
+       track_visibility='onchange', help='Estatus de la Solicitud', default='draft',track_visibility=True)
 
 
     check_ppto = fields.Selection([
         ('si_ppto', 'Presupuestado'),
         ('no_ppto', 'No Presupuestado'),
-    ], string='Tipo de pago', help="Seleccione si tiene rubro de presupuesto o no lo tiene", default='si_ppto')
-    proyecto = fields.Many2one('project.project',string='Nombre del Proyecto')
-    clave_pro = fields.Many2one('account.analytic.account',string='Clave del Proyecto')
-    rubro_cc = fields.Char('Rubro o Cuenta Contable') 
-    importe = fields.Float('Importe') 
-    iva = fields.Float('IVA',default='0') 
-    subtotal = fields.Float('Subtotal', compute='_total') 
-    retisr = fields.Float('Retención ISR') 
-    retiva = fields.Float('Retención IVA') 
-    total = fields.Float('Total', compute='_total') 
+    ], string='Tipo de pago', help="Seleccione si tiene rubro de presupuesto o no lo tiene", default='si_ppto',track_visibility=True)
+    proyecto = fields.Many2one('project.project',string='Nombre del Proyecto',track_visibility=True)
+    clave_pro = fields.Many2one('account.analytic.account',string='Clave del Proyecto',track_visibility=True)
+    rubro_cc = fields.Char('Rubro o Cuenta Contable',track_visibility=True)
+    importe = fields.Float('Importe',track_visibility=True)
+    iva = fields.Float('IVA',default='0',track_visibility=True)
+    subtotal = fields.Float('Subtotal', compute='_total',onchange_visibility=True)
+    retisr = fields.Float('Retención ISR',track_visibility=True)
+    retiva = fields.Float('Retención IVA',track_visibility=True)
+    total = fields.Float('Total', compute='_total',onchage_visibility=True)
 
 
-    jefe_directo = fields.Many2one('res.users',string='Jefe Directo')
-    finanzas = fields.Many2one('res.users',string='Finanzas')
-    vp_ap = fields.Many2one('res.users',string='V.P.')
-    tesoreria = fields.Many2one('res.users',string='Tesoreria')
-    anexos = fields.Selection([('1','Si'),('2','No')], string='Se anexan comprobantes: ')
-    adjuntos = fields.Binary(string='Adjunta los anexos')
+    jefe_directo = fields.Many2one('res.users',string='Jefe Directo',track_visibility=True)
+    finanzas = fields.Many2one('res.users',string='Finanzas',track_visibility=True)
+    vp_ap = fields.Many2one('res.users',string='V.P.',track_visibility=True)
+    tesoreria = fields.Many2one('res.users',string='Tesoreria',track_visibility=True)
+    anexos = fields.Selection([('1','Si'),('2','No')], string='Se anexan comprobantes: ',track_visibility=True)
+    adjuntos = fields.Binary(string='Adjunta los anexos',track_visibility=True)
 
-    approve_jefe_directo = fields.Char(string='Aprobacion Jefe Directo',readonly=True)
-    approve_finanzas = fields.Char(string='Aprobacion Finanzas',readonly=True)
-    approve_vp_ap = fields.Char(string='Aprobacion V.P.',readonly=True)
-    approve_tesoreria = fields.Char(string='Aprobacion Tesoreria',readonly=True)
-    refuse_user_id = fields.Char(string="Rechazado por",readonly = True,)
-    refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True)
-    jefe_directo_approve_date = fields.Datetime(string='Fecha de aprobacion del Jefe Directo',readonly=True,)
-    finanzas_approve_date = fields.Datetime(string='Fecha de aprobacion de Finanzas',readonly=True,)
-    vp_ap_approve_date = fields.Datetime(string='Fecha de aprobacion de V.P.',readonly=True,)
-    tesoreria_approve_date = fields.Datetime(string='Fecha de aprobacion de Tesoreria',readonly=True,)
-    refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True)
+    approve_jefe_directo = fields.Char(string='Aprobacion Jefe Directo',readonly=True,track_visibility=True)
+    approve_finanzas = fields.Char(string='Aprobacion Finanzas',readonly=True,track_visibility=True)
+    approve_vp_ap = fields.Char(string='Aprobacion V.P.',readonly=True,track_visibility=True)
+    approve_tesoreria = fields.Char(string='Aprobacion Tesoreria',readonly=True,track_visibility=True)
+    refuse_user_id = fields.Char(string="Rechazado por",readonly = True,track_visibility=True)
+    refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True,track_visibility=True)
+    jefe_directo_approve_date = fields.Datetime(string='Fecha de aprobacion del Jefe Directo',readonly=True,track_visibility=True)
+    finanzas_approve_date = fields.Datetime(string='Fecha de aprobacion de Finanzas',readonly=True,track_visibility=True)
+    vp_ap_approve_date = fields.Datetime(string='Fecha de aprobacion de V.P.',readonly=True,track_visibility=True)
+    tesoreria_approve_date = fields.Datetime(string='Fecha de aprobacion de Tesoreria',readonly=True,track_visibility=True)
+    refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True,track_visibility=True)
 
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
