@@ -74,6 +74,8 @@
                                 <field name="job_id"/>
                                 <field name="company_id"/>
                                 <field name="metodo"/>
+                                <field name="anexos" widget="radio" options="{'horizontal': true}"/>
+                                <field name="adjuntos" attrs="{'invisible':[('anexos','!=','1')]}"/>
                             </group>
                             <group>
                                 <field name="moneda"/>
@@ -81,6 +83,11 @@
                                 <field name="referencia"/>
                                 <field name="concepto"/>
                                 <field name="check_ppto"/>
+                                <div  attrs="{'invisible':[('anexos','!=','2')]}">
+                                    <p>
+                                    NOTA: Las solicitudes de pago sin comprobante son contabilizados como gastos a comprobar, por lo que quien solicita se responsabiliza de enviar los comprobantes a Finanzas, en un tiempo no mayor a 15 días.
+                                    </p>
+                                </div>
                             </group>
                         </group>
                         <notebook>

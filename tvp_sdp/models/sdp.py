@@ -21,7 +21,7 @@ class Sdp(models.Model):
         cr.execute('select coalesce(max(id), 0) from "sdp"')
         id_returned = cr.fetchone()
         if (max(id_returned)+1) < 10:
-            vals['name'] = "SDP00" + str(max(id_returned)+1)
+            vals['name'] = "SDP000" + str(max(id_returned)+1)
         if (max(id_returned)+1) >= 10 and (max(id_returned)+1) < 100:
             vals['name'] = "SDP0" + str(max(id_returned)+1)
         if (max(id_returned)+1) >= 100 :
@@ -79,7 +79,8 @@ class Sdp(models.Model):
     finanzas = fields.Many2one('res.users',string='Finanzas')
     vp_ap = fields.Many2one('res.users',string='V.P.')
     tesoreria = fields.Many2one('res.users',string='Tesoreria')
-
+    anexos = fields.Selection([('1','Si'),('2','No')], string='Se anexan comprobantes: ')
+    adjuntos = fields.Binary(string='Adjunta los anexos')
 
     approve_jefe_directo = fields.Char(string='Aprobacion Jefe Directo',readonly=True)
     approve_finanzas = fields.Char(string='Aprobacion Finanzas',readonly=True)
