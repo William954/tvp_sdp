@@ -1,2 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sdp,sdp,model_sdp,group_sdp,1,1,1,1
+access_sdp_1,sdp,model_sdp,group_sdp_user,1,1,1,1
+access_sdp_2,sdp,model_sdp,group_sdp_jefe,1,1,1,1
+access_sdp_3,sdp,model_sdp,group_sdp_finanza,1,1,1,1
+access_sdp_4,sdp,model_sdp,group_sdp_vp,1,1,1,1
+access_sdp_5,sdp,model_sdp,group_sdp_tesoreria,1,1,1,1

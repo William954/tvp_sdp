@@ -39,19 +39,16 @@
                         <button name="button_director_approval" string="Aprobacion Jefe Directo" 
                         type="object" class="oe_highlight" states="manager_ap" />
 
-                        <button name="button_finanzas_approval" string="Finanzas" 
+                        <button name="button_finanzas_approval" string="Aprobacion Vo. Bo.1" 
                         type="object" class="oe_highlight" states="finanzas_ap" /> 
 
-                        <button name="button_vp_approval" string="V.P." 
+                        <button name="button_vp_approval" string="Aprobacion Vo. Bo.2" 
                         type="object" class="oe_highlight" states="vp_ap" /> 
-
-                        <button name="button_tesoreria_approval" string="Tesoreria" 
-                        type="object" class="oe_highlight" states="tesoreria" /> 
 
                         <button name="button_cancel" string="Rechazar" 
                         type="object" class="oe_highlight" states="manager_ap,finanzas_ap,vp_ap,tesoreria" />  
 
-                        <button name="button_pay" string="Pagado" 
+                        <button name="button_pay" string="Pagar" 
                         type="object" class="oe_highlight" states="tesoreria" /> 
                         <field name="state" widget="statusbar"/>
                     </header>
