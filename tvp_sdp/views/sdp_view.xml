@@ -37,16 +37,16 @@
                         type="object" class="oe_highlight" states="draft" />
 
                         <button name="button_director_approval" string="Aprobacion Jefe Directo" 
-                        type="object" class="oe_highlight" states="manager_ap" groups="sdp.group_sdp_jefe"/>
+                        type="object" class="oe_highlight" states="manager_ap" groups="group_sdp_jefe"/>
 
                         <button name="button_finanzas_approval" string="Aprobacion Vo. Bo.1" 
-                        type="object" class="oe_highlight" states="finanzas_ap" groups="sdp.group_sdp_vp" /> 
+                        type="object" class="oe_highlight" states="finanzas_ap" groups="group_sdp_vp" /> 
 
                         <button name="button_vp_approval" string="Aprobacion Vo. Bo.2" 
-                        type="object" class="oe_highlight" states="vp_ap" groups="sdp.group_sdp_finanza" /> 
+                        type="object" class="oe_highlight" states="vp_ap" groups="group_sdp_finanza" /> 
 
                         <button name="button_cancel" string="Rechazar" 
-                        type="object" class="oe_highlight" states="manager_ap,finanzas_ap,vp_ap,tesoreria" groups="sdp.group_sdp_tesoreria" />  
+                        type="object" class="oe_highlight" states="manager_ap,finanzas_ap,vp_ap,tesoreria" groups="group_sdp_tesoreria" />  
 
                         <button name="button_pay" string="Pagar" 
                         type="object" class="oe_highlight" states="tesoreria" /> 
