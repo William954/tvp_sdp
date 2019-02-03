@@ -103,7 +103,7 @@ class Sdp(models.Model):
     @api.onchange('proyecto')
     def _analitic_id(self):
         if self.proyecto:
-            self.analitica = self.proyecto.analytic_account_id
+            self.clave_pro = self.proyecto.analytic_account_id
 
     @api.one
     @api.depends('subtotal','retisr','retiva','total','iva','importe')
