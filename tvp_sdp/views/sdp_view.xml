@@ -33,7 +33,7 @@
             <field name="arch" type="xml">
                 <form string="Solicitudes Actuales">
                     <header>
-                        <button name="button_confirm" string="Confirmar Pago" 
+                        <button name="button_confirm" string="Solicitud de Pago" 
                         type="object" class="oe_highlight" states="draft" />
 
                         <button name="button_director_approval" string="Aprobacion Jefe Directo" 

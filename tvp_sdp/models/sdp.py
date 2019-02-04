@@ -50,10 +50,10 @@ class Sdp(models.Model):
     concepto = fields.Char('Concepto', help="Razon de ser del pago",track_visibility=True)
     state = fields.Selection([
         ('draft', 'New'),
-        ('manager_ap', 'Vo. Bo. JD'),
-        ('finanzas_ap', 'Vo. Bo. Finanzas'),
-        ('vp_ap', 'Vo. Bo. VP'),
-        ('tesoreria', 'Tesoreria'),
+        ('manager_ap', 'Aprobacion Jefe Directo'),
+        ('finanzas_ap', 'Aprobacion Vo. Bo.1'),
+        ('vp_ap', 'Aprobacion Vo. Bo.2'),
+        ('tesoreria', 'Aprobacion Tesoreria'),
         ('pagado', 'Pagado'),
         ('rechazado', 'Rechazado'),
     ], string='Status',
