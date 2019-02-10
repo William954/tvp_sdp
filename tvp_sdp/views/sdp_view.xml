@@ -217,7 +217,7 @@
             </field>
         </record>
 
-        <menuitem id="sdp_root" name="Pagos"/>
+        <menuitem id="sdp_root" name="Pagos" web_icon="tvp_sdp,static/money.jpg"/>
         <menuitem id="sdp_menu1" name="Solicitudes de Pago" parent="sdp_root" action="action_sdp" sequence="1"/>
 
 </odoo>
