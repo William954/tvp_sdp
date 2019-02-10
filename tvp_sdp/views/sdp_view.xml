@@ -90,7 +90,7 @@
                         <notebook>
                             <page string="Montos y Presupuestos" name="other" attrs="{'invisible' : [('check_ppto','!=','si_ppto')]}">
                                 <group>
-                                    <group name="presupuesto_group" string="Datos de Proyecto o Presupuesto">
+                                    <group name="presupuesto_group" string="Datos de Proyecto o Presupuesto" attrs="{'invisible' : [('check_ppto','!=','si_ppto')]}">
                                         <field name="proyecto"/>
                                         <field name="clave_pro"/>
                                         <field name="rubro_cc"/>
