@@ -74,11 +74,10 @@ class Sdp(models.Model):
     retiva = fields.Float('Retención IVA',track_visibility=True)
     total = fields.Float('Total', compute='_total',onchage_visibility=True)
 
-
     jefe_directo = fields.Many2one('res.users',string='Jefe Directo',track_visibility=True)
     finanzas = fields.Many2one('res.users',string='Aprobador Vo. Bo.1',track_visibility=True)
     vp_ap = fields.Many2one('res.users',string='Aprobador Vo. Bo.2',track_visibility=True)
-    tesoreria = fields.Many2one('res.users',string='Tesoreria',track_visibility=True)
+    tesoreria = fields.Many2one('hr.employee',string='Tesoreria',track_visibility=True, compute="_default_head_branch")
     anexos = fields.Selection([('1','Si'),('2','No')], string='Se anexan comprobantes: ',track_visibility=True)
     adjuntos = fields.Binary(string='Adjunta los anexos',track_visibility=True)
 
@@ -99,6 +98,7 @@ class Sdp(models.Model):
         if self.employee_id:
             self.job_id = self.employee_id.job_id
             self.department_id = self.employee_id.department_id
+            self.jefe_directo = self.employee_id.timesheet_manager_id
 
     @api.onchange('proyecto')
     def _analitic_id(self):
@@ -110,6 +110,12 @@ class Sdp(models.Model):
     def _total(self):
         self.subtotal = self.iva + self.importe
         self.total = self.subtotal - (self.retisr + self.retiva)
+
+
+    @api.one
+    @api.depends('tesoreria')
+    def _default_head_branch(self):
+        self.tesoreria = self.env['hr.employee'].search([('name', '=','Ugalde Pintor Israel')], limit=1).id  
 
 
 # Aprobacion
