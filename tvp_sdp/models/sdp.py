@@ -77,7 +77,7 @@ class Sdp(models.Model):
     jefe_directo = fields.Many2one('res.users',string='Jefe Directo',track_visibility=True)
     finanzas = fields.Many2one('res.users',string='Aprobador Vo. Bo.1',track_visibility=True)
     vp_ap = fields.Many2one('res.users',string='Aprobador Vo. Bo.2',track_visibility=True)
-    tesoreria = fields.Many2one('hr.employee',string='Tesoreria',track_visibility=True, compute="_default_tesoreria")
+    tesoreria = fields.Many2one('hr.employee',string='Tesoreria',track_visibility=True)
     anexos = fields.Selection([('1','Si'),('2','No')], string='Se anexan comprobantes: ',track_visibility=True)
     adjuntos = fields.Binary(string='Adjunta los anexos',track_visibility=True)
 
