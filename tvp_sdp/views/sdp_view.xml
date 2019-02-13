@@ -124,7 +124,7 @@
                                         <field name="jefe_directo"/>
                                         <field name="finanzas"/>
                                         <field name="vp_ap"/>
-                                        <field name="tesoreria"/>
+                                        <field name="tesoreria" domain="['|',('name', '=','Ugalde Pintor Israel'),('name', '=','Olivia Serpa')]"/>
                                     </group>
                                 </group>
                                 <group name="refuse" string="Detalle de Rechazo">
