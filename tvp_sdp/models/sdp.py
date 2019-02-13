@@ -115,8 +115,7 @@ class Sdp(models.Model):
     @api.one
     @api.depends('tesoreria')
     def _default_tesoreria(self):
-        if self.tesoreria:
-            self.tesoreria = self.env['hr.employee'].search([('name', '=','Ugalde Pintor Israel')], limit=1).id  
+        self.tesoreria = self.env['hr.employee'].search([('name', '=','Ugalde Pintor Israel')], limit=1).id  
 
 
 # Aprobacion
