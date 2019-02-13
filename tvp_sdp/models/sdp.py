@@ -77,7 +77,7 @@ class Sdp(models.Model):
     jefe_directo = fields.Many2one('res.users',string='Jefe Directo',track_visibility=True)
     finanzas = fields.Many2one('res.users',string='Aprobador Vo. Bo.1',track_visibility=True)
     vp_ap = fields.Many2one('res.users',string='Aprobador Vo. Bo.2',track_visibility=True)
-    tesoreria = fields.Many2one('hr.employee',string='Tesoreria',track_visibility=True, compute="_default_head_branch")
+    tesoreria = fields.Many2one('hr.employee',string='Tesoreria',track_visibility=True, compute="_default_tesoreria")
     anexos = fields.Selection([('1','Si'),('2','No')], string='Se anexan comprobantes: ',track_visibility=True)
     adjuntos = fields.Binary(string='Adjunta los anexos',track_visibility=True)
 
@@ -114,8 +114,9 @@ class Sdp(models.Model):
 
     @api.one
     @api.depends('tesoreria')
-    def _default_head_branch(self):
-        self.tesoreria = self.env['hr.employee'].search([('name', '=','Ugalde Pintor Israel')], limit=1).id  
+    def _default_tesoreria(self):
+        if self.tesoreria:
+            self.tesoreria = self.env['hr.employee'].search([('name', '=','Ugalde Pintor Israel')], limit=1).id  
 
 
 # Aprobacion
