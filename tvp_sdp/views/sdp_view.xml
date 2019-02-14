@@ -130,7 +130,7 @@
                                 <group name="refuse" string="Detalle de Rechazo">
                                     <group>
                                         <field name="refuse_user_id"/>
-                                        <field name="refuse_motive" attrs="{'readonly' : [('status','!=','rechazado')]}"/>
+                                        <field name="refuse_motive" attrs="{'readonly' : [('state','!=','rechazado')]}"/>
                                     </group>
                                     <group>
                                         <field name="refuse_date"/>
