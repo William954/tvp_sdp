@@ -92,6 +92,7 @@ class Sdp(models.Model):
     vp_ap_approve_date = fields.Datetime(string='Fecha de aprobacion de Vo. Bo.2',readonly=True,track_visibility=True)
     tesoreria_approve_date = fields.Datetime(string='Fecha de aprobacion de Tesoreria',readonly=True,track_visibility=True)
     refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True,track_visibility=True)
+    refuse_motive = fields.Text(string="Motivo de Rechazo",track_visibility=True )
 
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
