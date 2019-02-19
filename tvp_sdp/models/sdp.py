@@ -53,6 +53,7 @@ class Sdp(models.Model):
         ('manager_ap', 'Aprobacion Jefe Directo'),
         ('finanzas_ap', 'Aprobacion Vo. Bo.1'),
         ('vp_ap', 'Aprobacion Vo. Bo.2'),
+        ('vo_bo3','Aprobacion Vo. Bo.3'),
         ('tesoreria', 'Aprobacion Tesoreria'),
         ('pagado', 'Pagado'),
         ('rechazado', 'Rechazado'),
@@ -64,6 +65,7 @@ class Sdp(models.Model):
         ('si_ppto', 'Presupuestado'),
         ('no_ppto', 'No Presupuestado'),
     ], string='Tipo de pago', help="Seleccione si tiene rubro de presupuesto o no lo tiene", default='si_ppto',track_visibility=True)
+    
     proyecto = fields.Many2one('project.project',string='Nombre del Proyecto',track_visibility=True)
     clave_pro = fields.Many2one('account.analytic.account',string='Clave del Proyecto',track_visibility=True)
     rubro_cc = fields.Char('Rubro o Cuenta Contable',track_visibility=True)
@@ -77,6 +79,9 @@ class Sdp(models.Model):
     jefe_directo = fields.Many2one('res.users',string='Jefe Directo',track_visibility=True)
     finanzas = fields.Many2one('res.users',string='Aprobador Vo. Bo.1',track_visibility=True)
     vp_ap = fields.Many2one('res.users',string='Aprobador Vo. Bo.2',track_visibility=True)
+
+    vo_bo3 = fields.Many2one('res.users', string='Aprobador Vo. Bo.3',track_visibility=True)
+
     tesoreria = fields.Many2one('hr.employee',string='Tesoreria',track_visibility=True)
     anexos = fields.Selection([('1','Si'),('2','No')], string='Se anexan comprobantes: ',track_visibility=True)
     adjuntos = fields.Binary(string='Adjunta los anexos',track_visibility=True)
@@ -84,15 +89,32 @@ class Sdp(models.Model):
     approve_jefe_directo = fields.Char(string='Aprobacion Jefe Directo',readonly=True,track_visibility=True)
     approve_finanzas = fields.Char(string='Aprobacion Vo. Bo.1',readonly=True,track_visibility=True)
     approve_vp_ap = fields.Char(string='Aprobacion Vo. Bo.2',readonly=True,track_visibility=True)
-    approve_tesoreria = fields.Char(string='Aprobacion Tesoreria',readonly=True,track_visibility=True)
+
+    approve_vo_bo3 = fields.Char(string='Aprobacion Vo. Bo.3',readonly=True,track_visibility=True)
+
+    approve_tesoreria = fields.Char(string='Pago Tesoreria',readonly=True,track_visibility=True)
     refuse_user_id = fields.Char(string="Rechazado por",readonly = True,track_visibility=True)
     refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True,track_visibility=True)
     jefe_directo_approve_date = fields.Datetime(string='Fecha de aprobacion del Jefe Directo',readonly=True,track_visibility=True)
     finanzas_approve_date = fields.Datetime(string='Fecha de aprobacion Vo. Bo.1',readonly=True,track_visibility=True)
     vp_ap_approve_date = fields.Datetime(string='Fecha de aprobacion de Vo. Bo.2',readonly=True,track_visibility=True)
-    tesoreria_approve_date = fields.Datetime(string='Fecha de aprobacion de Tesoreria',readonly=True,track_visibility=True)
+
+    vo_bo3_approve_date = fields.Datetime(string='Fecha de aprobacion de Vo. Bo.3',readonly=True,track_visibility=True)
+
+    tesoreria_approve_date = fields.Datetime(string='Fecha de Pago Tesoreria',readonly=True,track_visibility=True)
     refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True,track_visibility=True)
     refuse_motive = fields.Text(string="Motivo de Rechazo",track_visibility=True )
+    logged = fields.Boolean(string='Usuario activo',compute="_active_user")
+
+
+    @api.depends('logged')
+    def _active_user(self):
+        if self.env.user == self.jefe_directo:
+            self.logged = True
+        else:
+            self.logged = False
+
+
 
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
@@ -172,19 +194,55 @@ class Sdp(models.Model):
 
     @api.multi
     def button_vp_approval(self,vals):
-        for rec in self:    
-            if not rec.jefe_directo:
-                raise UserError(_('Porfavor selecciona un jefe directo'))
-            if not rec.finanzas:
-                raise UserError(_('Porfavor selecciona un  Vo. Bo.1'))
-            if not rec.vp_ap:
-                raise UserError(_('Porfavor selecciona un  Vo. Bo.2'))
-            if not rec.tesoreria:
-                raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
-            else: 
-                rec.state = 'tesoreria'
-                rec.approve_vp_ap = self.env.user.name
-                rec.vp_ap_approve_date = fields.Datetime.now()
+        if  self.check_ppto == 'no_ppto':          
+            for rec in self:    
+                if not rec.jefe_directo:
+                    raise UserError(_('Porfavor selecciona un jefe directo'))
+                if not rec.finanzas:
+                    raise UserError(_('Porfavor selecciona un  Vo. Bo.1'))
+                if not rec.vp_ap:
+                    raise UserError(_('Porfavor selecciona un  Vo. Bo.2'))
+                if not rec.vo_bo3:
+                    raise UserError(_('Porfavor selecciona un  Vo. Bo.3'))
+                if not rec.tesoreria:
+                    raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
+                else: 
+                    rec.state = 'vo_bo3'
+                    rec.approve_vp_ap = self.env.user.name
+                    rec.vp_ap_approve_date = fields.Datetime.now()
+
+        else:
+
+            for rec in self:
+                if not rec.jefe_directo:
+                    raise UserError(_('Porfavor selecciona un jefe directo'))
+                if not rec.finanzas:
+                    raise UserError(_('Porfavor selecciona un  Vo. Bo.1'))
+                if not rec.vp_ap:
+                    raise UserError(_('Porfavor selecciona un  Vo. Bo.2'))
+                if not rec.tesoreria:
+                    raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
+                else: 
+                    rec.state = 'tesoreria'
+                    rec.approve_vp_ap = self.env.user.name
+                    rec.vp_ap_approve_date = fields.Datetime.now()          
+  
+
+    @api.multi
+    def button_vp_app_vobo3(self,vals):
+            for rec in self:
+                if not rec.jefe_directo:
+                    raise UserError(_('Porfavor selecciona un jefe directo'))
+                if not rec.finanzas:
+                    raise UserError(_('Porfavor selecciona un  Vo. Bo.1'))
+                if not rec.vp_ap:
+                    raise UserError(_('Porfavor selecciona un  Vo. Bo.2'))
+                if not rec.tesoreria:
+                    raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
+                else: 
+                    rec.state = 'tesoreria'
+                    rec.approve_vo_bo3 = self.env.user.name
+                    rec.vo_bo3_approve_date = fields.Datetime.now()
 
     @api.multi
     def button_pay(self,vals):

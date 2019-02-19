@@ -25,7 +25,7 @@
                 </search>
             </field>
         </record>
-
+ 
 
         <record id="sdp_view_form" model="ir.ui.view">
             <field name="name">sdp.form</field>
@@ -37,13 +37,18 @@
                         type="object" class="oe_highlight" states="draft" />
 
                         <button name="button_director_approval" string="Aprobacion Jefe Directo" 
-                        type="object" class="oe_highlight" states="manager_ap" groups="tvp_sdp.group_sdp_jefe"/>
+                        type="object" class="oe_highlight" attrs="{'invisible':[('logged','=',False)]}"  groups="tvp_sdp.group_sdp_jefe" />
 
                         <button name="button_finanzas_approval" string="Aprobacion Vo. Bo.1" 
                         type="object" class="oe_highlight" states="finanzas_ap" groups="tvp_sdp.group_sdp_vp" /> 
 
                         <button name="button_vp_approval" string="Aprobacion Vo. Bo.2" 
-                        type="object" class="oe_highlight" states="vp_ap" groups="tvp_sdp.group_sdp_finanza" /> 
+                        type="object" class="oe_highlight" states="vp_ap" groups="tvp_sdp.group_sdp_finanza" />
+
+                        <!-- nuevo -->
+                        <button name="button_vp_app_vobo3" string="Aprobacion Vo. Bo.3" 
+                        type="object" class="oe_highlight" states="vo_bo3" groups="tvp_sdp.group_sdp_vobo3" />
+                        <!-- Nuevo -->
 
                         <button name="button_cancel" string="Rechazar" 
                         type="object" class="oe_highlight" states="manager_ap,finanzas_ap,vp_ap,tesoreria" groups="tvp_sdp.group_sdp_tesoreria,tvp_sdp.group_sdp_jefe,tvp_sdp.group_sdp_vp,tvp_sdp.group_sdp_finanza" />  
@@ -73,6 +78,7 @@
                                 <field name="metodo"/>
                                 <field name="anexos" widget="radio" options="{'horizontal': true}"/>
                                 <field name="adjuntos" attrs="{'invisible':[('anexos','!=','1')]}"/>
+                                <field name="logged" invisible="1"/>
                             </group>
                             <group>
                                 <field name="moneda"/>
@@ -112,19 +118,22 @@
                                         <field name="approve_jefe_directo"/>
                                         <field name="approve_finanzas"/>
                                         <field name="approve_vp_ap"/>
+                                        <field name="approve_vo_bo3" attrs="{'invisible' : [('check_ppto','!=','no_ppto')]}"/>
                                         <field name="approve_tesoreria"/>
                                     </group>
                                     <group>
                                         <field name="jefe_directo_approve_date"/>
                                         <field name="finanzas_approve_date"/>
                                         <field name="vp_ap_approve_date"/>
+                                        <field name="vo_bo3_approve_date" attrs="{'invisible' : [('check_ppto','!=','no_ppto')]}"/>
                                         <field name="tesoreria_approve_date"/>
                                     </group>
                                     <group>
                                         <field name="jefe_directo"/>
                                         <field name="finanzas"/>
                                         <field name="vp_ap"/>
-                                        <field name="tesoreria" domain="['|',('name', '=','Ugalde Pintor Israel'),('name', '=','Serpa Pérez María Olivia')]"/>
+                                        <field name="vo_bo3" attrs="{'invisible' : [('check_ppto','!=','no_ppto')]}"/>
+                                        <field name="tesoreria" /><!-- domain="['|',('name', '=','Ugalde Pintor Israel'),('name', '=','Serpa Pérez María Olivia')]" -->
                                     </group>
                                 </group>
                                 <group name="refuse" string="Detalle de Rechazo">
