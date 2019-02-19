@@ -133,7 +133,7 @@
                                         <field name="finanzas"/>
                                         <field name="vp_ap"/>
                                         <field name="vo_bo3" attrs="{'invisible' : [('check_ppto','!=','no_ppto')]}"/>
-                                        <field name="tesoreria" /><!-- domain="['|',('name', '=','Ugalde Pintor Israel'),('name', '=','Serpa Pérez María Olivia')]" -->
+                                        <field name="tesoreria" domain="['|',('name', '=','Ugalde Pintor Israel'),('name', '=','Serpa Pérez María Olivia')]" />
                                     </group>
                                 </group>
                                 <group name="refuse" string="Detalle de Rechazo">
