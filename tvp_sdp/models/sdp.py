@@ -262,9 +262,31 @@ class Sdp(models.Model):
                 self.state = 'pagado' 
 
 
+
+   
+class Refused(models.TransientModel):
+    _name = 'sdp.wizard'
+    _description = 'Wizad para la cancelacion'
+    _inherit = 'sdp'
+
+
+    note = fields.Text(
+        string="Motivo de Rechazo",
+        required=True,
+    )
+
     @api.multi
     def button_cancel(self):
-        self.state = 'rechazado'  
-        self.refuse_user_id = self.env.user.name
-        self.refuse_date = fields.Datetime.now()
-   
+        sdp_id = self.env['sdp'].browse(int(self._context.get('active_id')))
+        for rec in self:
+            sdp_id.state = 'rechazado' 
+            sdp_id.refuse_motive = rec.note
+            sdp_id.refuse_user_id = rec.env.user.name
+            sdp_id.refuse_date = fields.Datetime.now()
+
+
+    # @api.multi
+    # def button_cancel(self):
+    #     self.state = 'rechazado'  
+    #     self.refuse_user_id = self.env.user.name
+    #     self.refuse_date = fields.Datetime.now()
