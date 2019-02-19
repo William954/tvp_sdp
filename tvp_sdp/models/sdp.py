@@ -106,6 +106,7 @@ class Sdp(models.Model):
     refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True,track_visibility=True)
     refuse_motive = fields.Text(string="Motivo de Rechazo",track_visibility=True )
     logged = fields.Boolean(string='Usuario activo',compute="_active_user")
+    user_logged = fields.Many2one('res.users',string="Hola", compute="_compute_user_logged")
 
 
     @api.depends('logged')
@@ -115,6 +116,10 @@ class Sdp(models.Model):
         else:
             self.logged = False
 
+
+    @api.one
+    def _compute_user_logged(self):
+        self.user_logged = self.env.user.id
 
 
     @api.onchange('employee_id')
@@ -140,7 +145,6 @@ class Sdp(models.Model):
     # @api.depends('tesoreria')
     # def _default_tesoreria(self):
     #     self.tesoreria = self.env['hr.employee'].search([('name', '=','Ugalde Pintor Israel'),('name', '=','Olivia Serpa')]).id  
-
 
 # Aprobacion
 

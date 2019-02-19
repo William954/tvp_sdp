@@ -70,28 +70,51 @@
             <field name="arch" type="xml">
                 <form string="Solicitudes Actuales">
                     <header>
-                        <button name="button_confirm" string="Solicitud de Pago" 
-                        type="object" class="oe_highlight" states="draft" />
+                        <button name="button_confirm" 
+                                string="Solicitud de Pago" 
+                                type="object" 
+                                class="oe_highlight" 
+                                states="draft" />
 
-                        <button name="button_director_approval" string="Aprobacion Jefe Directo" 
-                        type="object" class="oe_highlight" attrs="{'invisible':['|',('logged','=',False),('state', 'not in', 'manager_ap')]}" states="manager_ap"  groups="tvp_sdp.group_sdp_jefe" />
+                        <button name="button_director_approval" 
+                                string="Aprobacion Jefe Directo" 
+                                type="object" 
+                                class="oe_highlight" 
+                                attrs="{'invisible':['|',('logged','!=',False),('state', 'not in', 'manager_ap')]}" 
+                                groups="tvp_sdp.group_sdp_jefe" />
 
-                        <button name="button_finanzas_approval" string="Aprobacion Vo. Bo.1" 
-                        type="object" class="oe_highlight" states="finanzas_ap" groups="tvp_sdp.group_sdp_vp" /> 
+                        <button name="button_finanzas_approval" 
+                                string="Aprobacion Vo. Bo.1" 
+                                type="object" 
+                                class="oe_highlight"
+                                attrs="{'invisible':['|',('logged','!=',False),('state', 'not in', 'finanzas_ap')]}" 
+                                groups="tvp_sdp.group_sdp_vp" /> 
 
-                        <button name="button_vp_approval" string="Aprobacion Vo. Bo.2" 
-                        type="object" class="oe_highlight" states="vp_ap" groups="tvp_sdp.group_sdp_finanza" />
+                        <button name="button_vp_approval" 
+                                string="Aprobacion Vo. Bo.2" 
+                                type="object" 
+                                lass="oe_highlight"
+                                attrs="{'invisible':['|',('logged','!=',False),('state', 'not in', 'vp_ap')]}"  
+                                groups="tvp_sdp.group_sdp_finanza" />
 
                         <!-- nuevo -->
-                        <button name="button_vp_app_vobo3" string="Aprobacion Vo. Bo.3" 
-                        type="object" class="oe_highlight" states="vo_bo3" groups="tvp_sdp.group_sdp_vobo3" />
+                        <button name="button_vp_app_vobo3" 
+                                string="Aprobacion Vo. Bo.3" 
+                                type="object" 
+                                class="oe_highlight"
+                                attrs="{'invisible':['|',('logged','!=',False),('state', 'not in', 'vo_bo3')]}"   
+                                groups="tvp_sdp.group_sdp_vobo3" />
                         <!-- Nuevo -->
 
-                        <button name="%(action_wizard_refused)d" string="Rechazar" 
-                        type="action" class="oe_highlight" states="manager_ap,finanzas_ap,vp_ap,tesoreria" groups="tvp_sdp.group_sdp_tesoreria,tvp_sdp.group_sdp_jefe,tvp_sdp.group_sdp_vp,tvp_sdp.group_sdp_finanza" />  
+                        <button name="%(action_wizard_refused)d" 
+                                string="Rechazar" 
+                                type="action" 
+                                class="oe_highlight" 
+                                states="manager_ap,finanzas_ap,vp_ap,tesoreria" 
+                                groups="tvp_sdp.group_sdp_tesoreria,tvp_sdp.group_sdp_jefe,tvp_sdp.group_sdp_vp,tvp_sdp.group_sdp_finanza" />  
 
                         <button name="button_pay" string="Pagar" 
-                        type="object" class="oe_highlight" states="tesoreria" /> 
+                        type="object" class="oe_highlight" states="tesoreria" groups="tvp_sdp.group_sdp_tesoreria"/> 
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -117,6 +140,7 @@
                                 <field name="anexos" widget="radio" options="{'horizontal': true}"/>
                                 <field name="adjuntos" attrs="{'invisible':[('anexos','!=','1')]}"/>
                                 <field name="logged" invisible="1"/>
+                                <field name="user_logged"/>
                             </group>
                             <group>
                                 <field name="moneda"/>
