@@ -33,6 +33,7 @@ class Sdp(models.Model):
     name = fields.Char('Referencia de la Solicitud', required=True,default='New',track_visibility=True, readonly=True)
     employee_id = fields.Many2one('hr.employee', string='Solicitante',default=lambda self: self.env.user.employee_ids, track_visibility=True)
     department_id = fields.Many2one('hr.department', string="Departamento",track_visibility=True)
+    to_pay = fields.Many2one('res.partner',string="Beneficiario")
     job_id = fields.Many2one('hr.job', string='Puesto',track_visibility=True)
     active = fields.Boolean(default=True,track_visibility=True)
     company_id = fields.Many2one('res.company', string='Empresa',track_visibility=True)

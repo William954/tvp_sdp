@@ -72,6 +72,7 @@
                         <group>
                             <group>
                                 <field name="employee_id"/>
+                                <field name="to_pay" domain="[('is_company','=',True)]"/>
                                 <field name="department_id"/>
                                 <field name="job_id"/>
                                 <field name="company_id"/>
