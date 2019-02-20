@@ -139,8 +139,7 @@
                                 <field name="metodo"/>
                                 <field name="anexos" widget="radio" options="{'horizontal': true}"/>
                                 <field name="adjuntos" attrs="{'invisible':[('anexos','!=','1')]}"/>
-                                <field name="logged" invisible="1"/>
-                                <field name="user_logged"/>
+                                <field name="logged"/>
                             </group>
                             <group>
                                 <field name="moneda"/>
@@ -180,21 +179,21 @@
                                         <field name="approve_jefe_directo"/>
                                         <field name="approve_finanzas"/>
                                         <field name="approve_vp_ap"/>
-                                        <field name="approve_vo_bo3" attrs="{'invisible' : [('check_ppto','!=','no_ppto')]}"/>
+                                        <field name="approve_vo_bo3"/>
                                         <field name="approve_tesoreria"/>
                                     </group>
                                     <group>
                                         <field name="jefe_directo_approve_date"/>
                                         <field name="finanzas_approve_date"/>
                                         <field name="vp_ap_approve_date"/>
-                                        <field name="vo_bo3_approve_date" attrs="{'invisible' : [('check_ppto','!=','no_ppto')]}"/>
+                                        <field name="vo_bo3_approve_date"/>
                                         <field name="tesoreria_approve_date"/>
                                     </group>
                                     <group>
                                         <field name="jefe_directo"/>
                                         <field name="finanzas"/>
                                         <field name="vp_ap"/>
-                                        <field name="vo_bo3" attrs="{'invisible' : [('check_ppto','!=','no_ppto')]}"/>
+                                        <field name="vo_bo3"/>
                                         <field name="tesoreria" domain="['|',('name', '=','Ugalde Pintor Israel'),('name', '=','Serpa Pérez María Olivia')]" />
                                     </group>
                                 </group>

@@ -106,21 +106,18 @@ class Sdp(models.Model):
     refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True,track_visibility=True)
     refuse_motive = fields.Text(string="Motivo de Rechazo",track_visibility=True )
     logged = fields.Boolean(string='Usuario activo',compute="_active_user")
-    user_logged = fields.Many2one('res.users',string="Hola", compute="_compute_user_logged")
 
 
     @api.depends('logged')
     def _active_user(self):
         if self.env.user == self.jefe_directo:
-            self.logged = True
+            if self.env.user == self.finanzas:
+                if self.env.user == self.vp_ap:
+                    if self.env.user == self.vo_bo3:
+                        if self.env.user == self.tesoreria:
+                            self.logged = True
         else:
             self.logged = False
-
-
-    @api.one
-    def _compute_user_logged(self):
-        self.user_logged = self.env.user.id
-
 
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
@@ -162,7 +159,6 @@ class Sdp(models.Model):
                 raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
             else: 
                 self.state = 'manager_ap'
-
  
     @api.multi
     def button_director_approval(self,vals):
@@ -196,10 +192,9 @@ class Sdp(models.Model):
                 rec.approve_finanzas = self.env.user.name
                 rec.finanzas_approve_date = fields.Datetime.now()
 
-
     @api.multi
     def button_vp_approval(self,vals):
-        if  self.check_ppto == 'no_ppto':          
+        # if  self.check_ppto == 'no_ppto':          
             for rec in self:    
                 if not rec.jefe_directo:
                     raise UserError(_('Porfavor selecciona un jefe directo'))
@@ -216,23 +211,22 @@ class Sdp(models.Model):
                     rec.approve_vp_ap = self.env.user.name
                     rec.vp_ap_approve_date = fields.Datetime.now()
 
-        else:
+        # else:
 
-            for rec in self:
-                if not rec.jefe_directo:
-                    raise UserError(_('Porfavor selecciona un jefe directo'))
-                if not rec.finanzas:
-                    raise UserError(_('Porfavor selecciona un  Vo. Bo.1'))
-                if not rec.vp_ap:
-                    raise UserError(_('Porfavor selecciona un  Vo. Bo.2'))
-                if not rec.tesoreria:
-                    raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
-                else: 
-                    rec.state = 'tesoreria'
-                    rec.approve_vp_ap = self.env.user.name
-                    rec.vp_ap_approve_date = fields.Datetime.now()          
+        #     for rec in self:
+        #         if not rec.jefe_directo:
+        #             raise UserError(_('Porfavor selecciona un jefe directo'))
+        #         if not rec.finanzas:
+        #             raise UserError(_('Porfavor selecciona un  Vo. Bo.1'))
+        #         if not rec.vp_ap:
+        #             raise UserError(_('Porfavor selecciona un  Vo. Bo.2'))
+        #         if not rec.tesoreria:
+        #             raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
+        #         else: 
+        #             rec.state = 'tesoreria'
+        #             rec.approve_vp_ap = self.env.user.name
+        #             rec.vp_ap_approve_date = fields.Datetime.now()          
   
-
     @api.multi
     def button_vp_app_vobo3(self,vals):
             for rec in self:
@@ -251,19 +245,19 @@ class Sdp(models.Model):
 
     @api.multi
     def button_pay(self,vals):
-        for rec in self:    
-            if not rec.jefe_directo:
-                raise UserError(_('Porfavor selecciona un jefe directo'))
-            if not rec.finanzas:
-                raise UserError(_('Porfavor selecciona un  Vo. Bo.1'))
-            if not rec.vp_ap:
-                raise UserError(_('Porfavor selecciona un  Vo. Bo.2'))
-            if not rec.tesoreria:
-                raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
-            else: 
-                rec.approve_tesoreria = self.env.user.name
-                rec.tesoreria_approve_date = fields.Datetime.now()
-                self.state = 'pagado' 
+            for rec in self:    
+                if not rec.jefe_directo:
+                    raise UserError(_('Porfavor selecciona un jefe directo'))
+                if not rec.finanzas:
+                    raise UserError(_('Porfavor selecciona un  Vo. Bo.1'))
+                if not rec.vp_ap:
+                    raise UserError(_('Porfavor selecciona un  Vo. Bo.2'))
+                if not rec.tesoreria:
+                    raise UserError(_('Porfavor selecciona un encargado de tesoreria'))
+                else: 
+                    rec.approve_tesoreria = self.env.user.name
+                    rec.tesoreria_approve_date = fields.Datetime.now()
+                    self.state = 'pagado' 
 
 
 
