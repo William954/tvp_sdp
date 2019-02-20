@@ -105,23 +105,46 @@ class Sdp(models.Model):
     tesoreria_approve_date = fields.Datetime(string='Fecha de Pago Tesoreria',readonly=True,track_visibility=True)
     refuse_date = fields.Datetime(string="Fecha de Rechazo",readonly=True,track_visibility=True)
     refuse_motive = fields.Text(string="Motivo de Rechazo",track_visibility=True )
-    logged = fields.Boolean(string='Usuario activo',compute="_active_user")
+    logged_jd = fields.Boolean(string='Jefe activo',compute="_active_jd")
+    logged_vobo1 = fields.Boolean(string='Jefe activo',compute="_active_vb1")
+    logged_vobo2 = fields.Boolean(string='Jefe activo',compute="_active_vb2")
+    logged_vobo3 = fields.Boolean(string='Jefe activo',compute="_active_vb3")
+    logged_teso = fields.Boolean(string='Jefe activo',compute="_active_tespreria")
 
-
-    @api.depends('logged')
-    def _active_user(self):
+    @api.depends('logged_jd')
+    def _active_jd(self):
         if self.env.user == self.jefe_directo:
-            self.logged = True
-            if self.env.user == self.finanzas:
-                self.logged = True
-                if self.env.user == self.vp_ap:
-                    self.logged = True
-                    if self.env.user == self.vo_bo3:
-                        self.logged = True
-                        if self.env.user == self.tesoreria:
-                            self.logged = True
+            self.logged_jd = True
         else:
-            self.logged = False
+            self.logged_jd = False
+
+    @api.depends('logged_vobo1')
+    def _active_vb1(self):
+        if self.env.user == self.finanzas:
+            self.logged_vobo1 = True
+        else:
+            self.logged_vobo1 = False
+
+    @api.depends('logged_vobo2')
+    def _active_vb2(self):
+        if self.env.user == self.vp_ap:
+            self.logged_vobo2 = True
+        else:
+            self.logged_vobo2 = False
+
+    @api.depends('logged_vobo3')
+    def _active_vb3(self):
+        if self.env.user == self.vo_bo3:
+            self.logged_vobo3 = True
+        else:
+            self.logged_vobo3 = False
+
+    @api.depends('logged_teso')
+    def _active_tespreria(self):
+        if self.env.user == self.tesoreria:
+            self.logged_teso = True
+        else:
+            self.logged_teso = False
 
     @api.onchange('employee_id')
     def _onchange_employee_id(self):
