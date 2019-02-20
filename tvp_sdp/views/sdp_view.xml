@@ -80,21 +80,21 @@
                                 string="Aprobacion Jefe Directo" 
                                 type="object" 
                                 class="oe_highlight" 
-                                attrs="{'invisible':['|',('logged','!=',False),('state', 'not in', 'manager_ap')]}" 
+                                attrs="{'invisible':['|',('logged','=',False),('state', 'not in', 'manager_ap')]}" 
                                 groups="tvp_sdp.group_sdp_jefe" />
 
                         <button name="button_finanzas_approval" 
                                 string="Aprobacion Vo. Bo.1" 
                                 type="object" 
                                 class="oe_highlight"
-                                attrs="{'invisible':['|',('logged','!=',False),('state', 'not in', 'finanzas_ap')]}" 
+                                attrs="{'invisible':['|',('logged','=',False),('state', 'not in', 'finanzas_ap')]}" 
                                 groups="tvp_sdp.group_sdp_vp" /> 
 
                         <button name="button_vp_approval" 
                                 string="Aprobacion Vo. Bo.2" 
                                 type="object" 
                                 lass="oe_highlight"
-                                attrs="{'invisible':['|',('logged','!=',False),('state', 'not in', 'vp_ap')]}"  
+                                attrs="{'invisible':['|',('logged','=',False),('state', 'not in', 'vp_ap')]}"  
                                 groups="tvp_sdp.group_sdp_finanza" />
 
                         <!-- nuevo -->
@@ -102,7 +102,7 @@
                                 string="Aprobacion Vo. Bo.3" 
                                 type="object" 
                                 class="oe_highlight"
-                                attrs="{'invisible':['|',('logged','!=',False),('state', 'not in', 'vo_bo3')]}"   
+                                attrs="{'invisible':['|',('logged','=',False),('state', 'not in', 'vo_bo3')]}"   
                                 groups="tvp_sdp.group_sdp_vobo3" />
                         <!-- Nuevo -->
 
