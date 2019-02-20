@@ -111,11 +111,15 @@ class Sdp(models.Model):
     @api.depends('logged')
     def _active_user(self):
         if self.env.user == self.jefe_directo:
-            # if self.env.user == self.finanzas:
-            #     if self.env.user == self.vp_ap:
-            #         if self.env.user == self.vo_bo3:
-            #             if self.env.user == self.tesoreria:
             self.logged = True
+            if self.env.user == self.finanzas:
+                self.logged = True
+                if self.env.user == self.vp_ap:
+                    self.logged = True
+                    if self.env.user == self.vo_bo3:
+                        self.logged = True
+                        if self.env.user == self.tesoreria:
+                            self.logged = True
         else:
             self.logged = False
 
