@@ -165,10 +165,10 @@ class Sdp(models.Model):
         self.total = self.subtotal - (self.retisr + self.retiva)
 
 
-    @api.one
-    @api.depends('tesoreria')
-    def _default_tesoreria(self):
-        self.tesoreria = self.env['hr.employee'].search([('name', '=','Ugalde Pintor Israel')], limit=1).id  
+    # @api.one
+    # @api.depends('tesoreria')
+    # def _default_tesoreria(self):
+    #     self.tesoreria = self.env['hr.employee'].search([('name', '=','Ugalde Pintor Israel'),('name', '=','Olivia Serpa')]).id  
 
 # Aprobacion
 
