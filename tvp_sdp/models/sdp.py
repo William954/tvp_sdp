@@ -109,7 +109,7 @@ class Sdp(models.Model):
     logged_vobo1 = fields.Boolean(string='Jefe activo',compute="_active_vb1")
     logged_vobo2 = fields.Boolean(string='Jefe activo',compute="_active_vb2")
     logged_vobo3 = fields.Boolean(string='Jefe activo',compute="_active_vb3")
-    logged_teso = fields.Boolean(string='Jefe activo',compute="_active_tespreria")
+    logged_teso = fields.Boolean(string='Jefe activo',compute="_active_tesoreria")
 
     @api.depends('logged_jd')
     def _active_jd(self):
@@ -140,7 +140,7 @@ class Sdp(models.Model):
             self.logged_vobo3 = False
 
     @api.depends('logged_teso')
-    def _active_tespreria(self):
+    def _active_tesoreria(self):
         if self.env.user == self.tesoreria:
             self.logged_teso = True
         else:
