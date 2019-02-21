@@ -200,8 +200,12 @@
                                         <field name="jefe_directo"/>
                                         <field name="finanzas"/>
                                         <field name="vp_ap"/>
+<<<<<<< HEAD
                                         <field name="vo_bo3"/>
                                         <field name="tesoreria" domain="['|',('name', '=','Ugalde Pintor Israel'),('name', '=','Serpa Pérez María Olivia')]" />
+=======
+                                        <field name="tesoreria"/>
+>>>>>>> parent of ce2511d... Cambio de funcion en SDP filtro Tesoreria
                                     </group>
                                 </group>
                                 <group name="refuse" string="Detalle de Rechazo">
