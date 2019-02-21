@@ -142,7 +142,7 @@ class Sdp(models.Model):
 
     @api.depends('logged_teso')
     def _active_tesoreria(self):
-        if self.env.user.employee_ids == self.tesoreria:
+        if self.env.user == self.tesoreria:
             self.logged_teso = True
         else:
             self.logged_teso = False
