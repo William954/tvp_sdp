@@ -201,7 +201,7 @@
                                         <field name="finanzas"/>
                                         <field name="vp_ap"/>
                                         <field name="vo_bo3"/>
-                                        <field name="tesoreria" domain="['|',('name', '=','Ugalde Pintor Israel'),('name', '=','Serpa Pérez María Olivia')]" />
+                                        <field name="tesoreria" domain="['|',('name', '=','Israel Ugalde'),('name', '=','Olivia Serpa')]" />
                                     </group>
                                 </group>
                                 <group name="refuse" string="Detalle de Rechazo">
