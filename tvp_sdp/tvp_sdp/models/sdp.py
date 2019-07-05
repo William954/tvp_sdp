@@ -75,7 +75,7 @@ class Sdp(models.Model):
     subtotal = fields.Float('Subtotal', compute='_total',onchange_visibility=True)
     retisr = fields.Float('Retención ISR',track_visibility=True)
     retiva = fields.Float('Retención IVA',track_visibility=True)
-    total = fields.Float('Total', compute='_total',store=True, onchage_visibility=True)
+    total = fields.Float('Total', compute='_total', onchage_visibility=True)
 
     jefe_directo = fields.Many2one('res.users',string='Jefe Directo',track_visibility=True)
     finanzas = fields.Many2one('res.users',string='Aprobador Vo. Bo.1',track_visibility=True)
