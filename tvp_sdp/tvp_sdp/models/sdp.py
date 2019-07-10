@@ -72,10 +72,10 @@ class Sdp(models.Model):
     rubro_cc = fields.Char('Rubro o Cuenta Contable',track_visibility=True)
     importe = fields.Float('Importe',track_visibility=True)
     iva = fields.Float('IVA',default='0',track_visibility=True)
-    subtotal = fields.Float('Subtotal', compute='_total',onchange_visibility=True)
+    subtotal = fields.Float('Subtotal', compute='_total',onchange_visibility=True, store=True)
     retisr = fields.Float('Retención ISR',track_visibility=True)
     retiva = fields.Float('Retención IVA',track_visibility=True)
-    total = fields.Float('Total', compute='_total', onchage_visibility=True)
+    total = fields.Float('Total', compute='_total', onchage_visibility=True, store=True)
 
     jefe_directo = fields.Many2one('res.users',string='Jefe Directo',track_visibility=True)
     finanzas = fields.Many2one('res.users',string='Aprobador Vo. Bo.1',track_visibility=True)
